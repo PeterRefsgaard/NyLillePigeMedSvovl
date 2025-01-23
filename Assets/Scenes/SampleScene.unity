@@ -5936,7 +5936,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: cc47001371b5eb5489ab03977e78e9f4, type: 3}
       propertyPath: m_Name
-      value: House6
+      value: House niks pille
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc47001371b5eb5489ab03977e78e9f4, type: 3}
       propertyPath: m_LocalPosition.x
