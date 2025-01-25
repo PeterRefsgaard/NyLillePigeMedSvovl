@@ -1,43 +1,54 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class CameraZoom : MonoBehaviour
 {
-    public Transform startPoint;  // Kameraets startpunkt
-    public Transform middlePoint; // Kameraets midtpunkt
-    public Transform endPoint;    // Kameraets slutpunkt
-
-    public float moveDuration = 5f;  // Tid til at bevæge sig mellem punkter
+    public Transform startPoint;
+    public Transform middlePoint;
+    public Transform endPoint;
+    public float moveDuration = 5f;
+    public static bool cameraAtEnd = false;
+    public TextMeshProUGUI introText;
 
     void Start()
     {
-        // Start automatisk bevægelsen igennem sekvensen
+        cameraAtEnd = false;
         StartCoroutine(MoveCameraSequence());
     }
 
     private IEnumerator MoveCameraSequence()
     {
-        // Flyt kameraet fra startPoint til middlePoint
-        yield return StartCoroutine(MoveToPosition(startPoint.position, middlePoint.position, moveDuration));
-
-        // Flyt kameraet fra middlePoint til endPoint
-        yield return StartCoroutine(MoveToPosition(middlePoint.position, endPoint.position, moveDuration));
-
-        // Hvis du vil flytte kameraet tilbage, fjern kommentaren nedenfor
-        // yield return StartCoroutine(MoveToPosition(endPoint.position, middlePoint.position, moveDuration));
+        introText.color = new Color(introText.color.r, introText.color.g, introText.color.b, 1f);
+        yield return StartCoroutine(MoveToPosition(startPoint.position, middlePoint.position, moveDuration, true));
+        yield return StartCoroutine(MoveToPosition(middlePoint.position, endPoint.position, moveDuration, false));
+        cameraAtEnd = true;
     }
 
-    private IEnumerator MoveToPosition(Vector3 from, Vector3 to, float duration)
+    private IEnumerator MoveToPosition(Vector3 from, Vector3 to, float duration, bool fadeText)
     {
         float elapsedTime = 0f;
+        Color textColor = introText.color;
 
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             transform.position = Vector3.Lerp(from, to, elapsedTime / duration);
-            yield return null; // Vent til næste frame
+
+            if (fadeText)
+            {
+                float fadeAmount = Mathf.Lerp(1f, 0f, elapsedTime / duration);
+                introText.color = new Color(textColor.r, textColor.g, textColor.b, fadeAmount);
+            }
+
+            yield return null;
         }
 
-        transform.position = to;  // Sikrer præcis slutposition
+        transform.position = to;
+
+        if (fadeText)
+        {
+            introText.color = new Color(textColor.r, textColor.g, textColor.b, 0f);
+        }
     }
 }
