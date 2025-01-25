@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using UnityEngine;
 
 public class MoveGirlScript : MonoBehaviour
@@ -62,3 +62,4 @@ public class MoveGirlScript : MonoBehaviour
         transform.position = to; 
     }
 }
+*/
